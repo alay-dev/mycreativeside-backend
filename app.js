@@ -13,7 +13,7 @@ const commentRoutes = require("./routes/commentRouter");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://mycreativeside.vercel.app",
   optionsSuccessStatus: 200,
 };
 
