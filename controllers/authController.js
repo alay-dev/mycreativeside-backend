@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
+const AppError = require("../utils/appError");
 
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
@@ -69,11 +70,9 @@ exports.singup = catchAsync(async (req, res) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   //1)Get Token and ch3eck if it exists
-  var token = req.headers.token;
+  var token = req.body.token;
   if (!token) {
-    return next(
-      new AppError("You are not logged in! Please log in to get access.", 401)
-    );
+    return next(new AppError("You are not logged in!", 401));
   }
 
   //2) Verify token
@@ -104,4 +103,25 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
   //4) log the user in send jwt
   createSendToken(user, 200, res, "Password update sucessful");
+});
+
+exports.checkAdmin = catchAsync(async (req, res, next) => {
+  if (req.user.type !== "A") {
+    return next(new AppError("You do not have permission.", 403));
+  }
+  req.body.type = "A";
+  next();
+});
+
+exports.addAdmin = catchAsync(async (req, res) => {
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    contact_no: req.body.contact_no,
+    password: req.body.password,
+    url: req.body.url,
+    type: req.body.type,
+  });
+
+  createSendToken(newUser, 201, res, "Signup sucessful");
 });

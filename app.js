@@ -13,7 +13,9 @@ const commentRoutes = require("./routes/commentRouter");
 const app = express();
 
 var corsOptions = {
-  origin: "https://mycreativeside.vercel.app",
+  origin: "http://localhost:3000",
+
+  // origin: "https://mycreativeside.vercel.app",
   optionsSuccessStatus: 200,
 };
 
@@ -29,7 +31,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/comments", commentRoutes);
-
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on the server`, 404));
 });
