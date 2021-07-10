@@ -70,7 +70,7 @@ exports.singup = catchAsync(async (req, res) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   //1)Get Token and ch3eck if it exists
-  var token = req.body.token;
+  var token = req.headers.token;
   if (!token) {
     return next(new AppError("You are not logged in!", 401));
   }
@@ -91,6 +91,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   //1)get user from the collection
+
   const user = await User.findById(req.user.id).select("+password");
   //2) check the posted password is correct
   if (!(await user.correctPassword(req.body.current_password, user.password))) {

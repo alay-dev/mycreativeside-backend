@@ -51,12 +51,25 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: "User update sucessfull",
+    message: "Update successful",
     data: updatedUser,
   });
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndDelete(req.body.id);
+
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  res.status(204).json({
+    status: "success",
+    message: "User delete successful",
+  });
+});
+
+exports.deleteSelf = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndDelete(req.body.id);
 
   if (!user) {
