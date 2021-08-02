@@ -76,7 +76,7 @@ exports.deleteSelf = catchAsync(async (req, res, next) => {
     return next(new AppError("User not found", 404));
   }
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     message: "User delete successful",
   });

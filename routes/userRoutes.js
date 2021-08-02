@@ -29,7 +29,9 @@ router
   .patch(userController.updateUser)
   .delete(authController.protect, userController.deleteUser);
 
-router.route("/delete_self", authController.protect, userController.deleteSelf);
+router
+  .route("/delete_self")
+  .delete(authController.protect, userController.deleteSelf);
 
 router.route("/get_user").post(authController.protect, userController.getUser);
 
